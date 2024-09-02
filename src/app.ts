@@ -15,7 +15,7 @@ const app = express();
 app.use(morgan("dev"));
 
 app.use(cors({
-  origin: 'https://notesapp.onrender.com',
+  origin: 'https://notesapp-poz1.onrender.com/',
   credentials: true,
 }));
 
