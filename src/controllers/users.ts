@@ -81,6 +81,14 @@ export const login: RequestHandler<unknown,unknown,LoginBody,unknown> = async(re
     }
 
     req.session.userId=user._id;
+
+    res.cookie('connect.sid', req.sessionID, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Ensure this is true in production
+      sameSite: 'lax', // or 'none' if you are handling cross-origin POST requests
+      maxAge: 60 * 60 * 1000, // 1 hour
+    });
+
     res.status(201).json(user);
   }catch(err){
     next(err);
