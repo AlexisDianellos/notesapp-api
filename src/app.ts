@@ -8,19 +8,22 @@ import session from "express-session";
 import env from "./util/validateEnv";
 import MongoStore from "connect-mongo";
 import { requiresAuth } from "./middleware/auth";
-import cors from "cors";
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
-app.use(morgan("dev"));
+app.set('trust proxy', 1);
 
 app.use(cors({
-  origin: 'https://notesapp-poz1.onrender.com',
+  origin: 'http://localhost:3000', // Replace with your frontend URL
   credentials: true,
 }));
 
+app.use(morgan("dev"));
 
 app.use(express.json());//so we can send json to server
+app.use(cookieParser());
 
 app.use(session({
   secret: env.SESSION_SECRET,
@@ -28,12 +31,13 @@ app.use(session({
   saveUninitialized:false,
   cookie:{
     maxAge:60*60*1000,
-    sameSite: 'none',
     httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
   },
   rolling:true,
   store:MongoStore.create({
-    mongoUrl: env.MONGODB_CONNNECTION,
+    mongoUrl: env.MONGODB_CONNECTION,
   })
 }));
 

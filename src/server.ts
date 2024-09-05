@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 const port = env.PORT;
 
-mongoose.connect(env.MONGODB_CONNNECTION)
+mongoose.connect(env.MONGODB_CONNECTION)
   .then(()=>{
     console.log("mongoose connected");
     app.listen(port!, ()=>{
